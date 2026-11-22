@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>José Luis da Costa Junior | Desenvolvedor Back-end Python & IA</title>
+    <meta name="description" content="Portfólio de José Luis da Costa Junior — Desenvolvedor Back-end Python (FastAPI, Flask), Automação, RAG, LlamaIndex, Qdrant e Engenharia de Software.">
+
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151e32',
+                            950: '#090d16',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Gradiente sutil de grade de fundo para estética de engenharia */
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(16, 185, 129, 0.14) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+        .dark .bg-grid-pattern {
+            background-image: radial-gradient(rgba(6, 182, 212, 0.14) 1px, transparent 1px);
+        }
+
+        /* Animações de rolagem (Scroll Reveal com Stagger/Cascata) */
+        .js-reveal .reveal,
+        .js-reveal .reveal-item {
+            opacity: 0;
+            transform: translateY(42px) scale(0.97);
+            transition:
+                opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform;
+        }
+        .js-reveal .reveal.is-visible,
+        .js-reveal .reveal-item.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .js-reveal .reveal,
+            .js-reveal .reveal-item {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* Efeito Spotlight nos cards (segue o cursor) */
+        .spotlight-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                480px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+                rgba(16, 185, 129, 0.11),
+                transparent 42%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Cursor piscando no terminal */
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #10b981;
+            vertical-align: middle;
+            margin-left: 3px;
+            animation: blink 1s infinite;
+        }
+
+        /* Impressão limpa do resumo */
+        @media print {
+            .no-print { display: none !important; }
+            body { background: #fff !important; color: #000 !important; }
+            .reveal { opacity: 1 !important; transform: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-300 selection:bg-emerald-500 selection:text-white">
+
+    <!-- Barra de Progresso de Leitura -->
+    <div class="no-print fixed top-0 left-0 right-0 h-[3px] z-50 bg-transparent pointer-events-none">
+        <div id="scroll-progress" class="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 w-0 transition-all duration-100"></div>
+    </div>
+
+    <!-- Navbar Fixa -->
+    <header class="no-print sticky top-0 z-40 w-full backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="font-mono font-bold text-lg sm:text-xl tracking-tight flex items-center gap-1.5 group">
+                <span class="text-emerald-600 dark:text-emerald-400">&lt;</span>
+                <span class="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">JoséCosta</span>
+                <span class="text-cyan-600 dark:text-cyan-400">/&gt;</span>
+            </a>
+
+            <!-- Links Desktop -->
+            <nav id="desktop-nav" class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
+                <a href="#sobre" class="nav-link hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Sobre</a>
+                <a href="#stack" class="nav-link hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Stack</a>
+                <a href="#projetos" class="nav-link hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Projetos</a>
+                <a href="#experiencia" class="nav-link hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Experiência</a>
+                <a href="#contato" class="nav-link hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Contato</a>
+            </nav>
+
+            <!-- Ações à Direita -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Botão Alternar Tema -->
+                <button id="theme-toggle" type="button" aria-label="Alternar tema claro ou escuro"
+                    class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <i id="theme-icon" class="fa-solid fa-sun text-amber-400"></i>
+                </button>
+
+                <!-- Botão Resumo CV -->
+                <button onclick="openResumeModal()" type="button"
+                    class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm shadow-emerald-600/20 transition-all">
+                    <i class="fa-solid fa-file-lines text-xs"></i>
+                    <span>Resumo CV</span>
+                </button>
+
+                <!-- Botão Menu Mobile -->
+                <button id="mobile-menu-btn" type="button" aria-label="Abrir menu"
+                    class="md:hidden p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-2">
+            <a href="#sobre" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Sobre</a>
+            <a href="#stack" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Stack</a>
+            <a href="#projetos" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Projetos</a>
+            <a href="#experiencia" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Experiência</a>
+            <a href="#contato" class="mobile-link block px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Contato</a>
+            <button onclick="openResumeModal()" type="button"
+                class="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-600 text-white">
+                <i class="fa-solid fa-file-lines"></i>
+                <span>Ver Resumo do Currículo</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-grid-pattern border-b border-slate-200/80 dark:border-slate-800/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                <!-- Coluna Esquerda: Apresentação Direta -->
+                <div class="lg:col-span-7 space-y-5">
+                    <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-mono font-medium">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span>Diadema, SP • Desenvolvedor Back-end Jr</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12]">
+                        José Luis da <br class="hidden sm:inline">
+                        <span class="bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 bg-clip-text text-transparent">
+                            Costa Junior
+                        </span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+                        Engenharia de Software com foco em <strong class="text-slate-900 dark:text-white font-semibold">Python (FastAPI & Flask)</strong>, automação de processos, arquitetura <strong class="text-slate-900 dark:text-white font-semibold">RAG / LLMs</strong> e bancos de dados relacionais e vetoriais.
+                    </p>
+
+                    <!-- Pilares Rápidos para Recrutadores -->
+                    <div class="flex flex-wrap gap-2 pt-0.5">
+                        <span class="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Python • FastAPI / Flask</span>
+                        <span class="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200">RAG • LlamaIndex • Qdrant</span>
+                        <span class="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Docker • SQL • MongoDB</span>
+                    </div>
+
+                    <!-- Botões Principais -->
+                    <div class="flex flex-wrap items-center gap-3 pt-2">
+                        <a href="https://www.linkedin.com/in/josecosta-dev/" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl font-semibold text-sm bg-[#0a66c2] hover:bg-[#004182] text-white shadow-lg shadow-blue-600/20 transition-all">
+                            <i class="fa-brands fa-linkedin text-base"></i>
+                            <span>LinkedIn</span>
+                        </a>
+
+                        <a href="https://github.com/ReddyMaine?tab=repositories" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl font-semibold text-sm bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white border border-slate-700 transition-all">
+                            <i class="fa-brands fa-github text-base"></i>
+                            <span>GitHub (@ReddyMaine)</span>
+                        </a>
+
+                        <a href="https://wa.me/5511916060507" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl font-semibold text-sm bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 transition-all">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Terminal Interativo com Abas -->
+                <div class="lg:col-span-5">
+                    <div class="rounded-2xl bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden">
+                        <!-- Barra superior do terminal com abas -->
+                        <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                            </div>
+
+                            <!-- Abas interativas de código -->
+                            <div class="flex items-center gap-1 font-mono text-[11px] sm:text-xs">
+                                <button type="button" data-tab="dev" id="tab-dev"
+                                    class="terminal-tab px-2.5 py-1 rounded-md bg-slate-800 text-emerald-400 border border-slate-700 transition-colors">
+                                    developer.py
+                                </button>
+                                <button type="button" data-tab="rag" id="tab-rag"
+                                    class="terminal-tab px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition-colors">
+                                    rag_agent.py
+                                </button>
+                                <button type="button" data-tab="docker" id="tab-docker"
+                                    class="terminal-tab px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition-colors">
+                                    deploy.yml
+                                </button>
+                            </div>
+
+                            <button type="button" id="run-terminal-btn" title="Executar código"
+                                class="inline-flex items-center gap-1 font-mono text-[11px] text-emerald-400 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 px-2.5 py-0.5 rounded transition-colors cursor-pointer">
+                                <i class="fa-solid fa-play text-[9px]"></i>
+                                <span>Run</span>
+                            </button>
+                        </div>
+
+                        <!-- Conteúdo dinâmico do terminal -->
+                        <div id="terminal-content" class="p-5 sm:p-6 font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto text-slate-300 min-h-[245px] transition-opacity duration-150">
+                            <pre><code><span class="text-purple-400">class</span> <span class="text-amber-300">BackendDeveloper</span>:
+    <span class="text-purple-400">def</span> <span class="text-cyan-400">__init__</span>(<span class="text-rose-400">self</span>):
+        <span class="text-rose-400">self</span>.nome = <span class="text-emerald-400">"José Luis da Costa Junior"</span>
+        <span class="text-rose-400">self</span>.cargo = <span class="text-emerald-400">"Desenvolvedor Back-end Jr"</span>
+        <span class="text-rose-400">self</span>.local = <span class="text-emerald-400">"Diadema, SP"</span>
+        <span class="text-rose-400">self</span>.core_stack = [
+            <span class="text-emerald-400">"Python"</span>, <span class="text-emerald-400">"FastAPI"</span>, <span class="text-emerald-400">"Flask"</span>,
+            <span class="text-emerald-400">"LlamaIndex"</span>, <span class="text-emerald-400">"Qdrant"</span>, <span class="text-emerald-400">"RAG"</span>,
+            <span class="text-emerald-400">"SQL"</span>, <span class="text-emerald-400">"MongoDB"</span>, <span class="text-emerald-400">"Docker"</span>
+        ]
+
+    <span class="text-purple-400">def</span> <span class="text-cyan-400">status</span>(<span class="text-rose-400">self</span>) -> <span class="text-amber-300">str</span>:
+        <span class="text-purple-400">return</span> <span class="text-emerald-400">"APIs, Automação & IA Generativa"</span><span class="terminal-cursor"></span></code></pre>
+                        </div>
+
+                        <!-- Console de Saída Interativa do Terminal -->
+                        <div id="terminal-output" class="hidden px-5 py-3 bg-slate-900/95 border-t border-slate-800 font-mono text-xs text-emerald-400"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Sobre Mim -->
+    <section id="sobre" class="py-16 sm:py-20 reveal">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mb-8">
+                <span class="font-mono text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold">01 // Resumo</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mt-2 tracking-tight">Back-end, automação e IA aplicada</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-7 space-y-5">
+                    <p class="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
+                        Desenvolvedor Junior na <strong class="text-slate-900 dark:text-white font-semibold">Revio Tecnologia Tributária</strong> e graduando em <strong class="text-slate-900 dark:text-white font-semibold">Engenharia de Software (8º sem.)</strong> na USJT. Especializado em APIs assíncronas com <strong class="text-slate-900 dark:text-white font-semibold">Python (FastAPI/Flask)</strong>, automação web, bancos relacionais/NoSQL e soluções de <strong class="text-slate-900 dark:text-white font-semibold">IA Generativa (RAG, LlamaIndex, Qdrant)</strong>.
+                    </p>
+
+                    <!-- Métricas / Fatos Rápidos -->
+                    <div class="grid grid-cols-3 gap-3 pt-1">
+                        <div class="spotlight-card p-3.5 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800">
+                            <span class="block font-mono text-xs text-emerald-600 dark:text-emerald-400">Formação</span>
+                            <span class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">Eng. Software (8º)</span>
+                        </div>
+                        <div class="spotlight-card p-3.5 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800">
+                            <span class="block font-mono text-xs text-cyan-600 dark:text-cyan-400">Idioma</span>
+                            <span class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">Inglês Avançado</span>
+                        </div>
+                        <div class="spotlight-card p-3.5 rounded-xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800">
+                            <span class="block font-mono text-xs text-purple-600 dark:text-purple-400">Modelo</span>
+                            <span class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">Híbrido / Remoto</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards de Destaque -->
+                <div class="lg:col-span-5 grid grid-cols-1 gap-3.5">
+                    <div class="spotlight-card p-4 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">Back-end & Automação</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">FastAPI, Flask, AsyncIO, Threads, Selenium e Playwright.</p>
+                        </div>
+                    </div>
+
+                    <div class="spotlight-card p-4 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">IA Generativa & RAG</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">LlamaIndex, Qdrant, Gemini API, embeddings e busca semântica.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Stack & Competências -->
+    <section id="stack" class="py-16 sm:py-20 bg-slate-100/70 dark:bg-slate-950/60 border-y border-slate-200 dark:border-slate-800/80 reveal">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mb-10">
+                <span class="font-mono text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold">02 // Stack Principal</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mt-2 tracking-tight">Tecnologias em foco</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Categoria 1: Back-end & Linguagens -->
+                <div class="spotlight-card p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-emerald-500/40 transition-colors">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                            <i class="fa-solid fa-code"></i>
+                        </span>
+                        <h3 class="font-bold text-lg">Back-end & APIs</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">Python (Avançado)</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">FastAPI</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Flask</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Django</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Async / Threads</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">JS / TS (Node.js)</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Java</span>
+                    </div>
+                </div>
+
+                <!-- Categoria 2: IA Generativa & Automação -->
+                <div class="spotlight-card p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-purple-500/40 transition-colors">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                            <i class="fa-solid fa-robot"></i>
+                        </span>
+                        <h3 class="font-bold text-lg">IA & Automação</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20">RAG & Embeddings</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">LlamaIndex</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Gemini API</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Playwright</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Selenium</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Pandas & NumPy</span>
+                    </div>
+                </div>
+
+                <!-- Categoria 3: Dados & Infraestrutura -->
+                <div class="spotlight-card p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-cyan-500/40 transition-colors">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
+                            <i class="fa-solid fa-database"></i>
+                        </span>
+                        <h3 class="font-bold text-lg">Dados & DevOps</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20">SQL & SQLite</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">MongoDB</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Qdrant (Vector DB)</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Docker</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Git & GitHub</span>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">Power BI / ETL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Projetos em Destaque -->
+    <section id="projetos" class="py-20 sm:py-24 reveal">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div>
+                    <span class="font-mono text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold">03 // Portfólio no GitHub</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold mt-2 tracking-tight">Projetos em destaque</h2>
+                </div>
+
+                <!-- Filtros Interativos -->
+                <div class="flex flex-wrap gap-2" id="project-filters">
+                    <button data-filter="all" class="filter-btn active px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white transition-all">
+                        Todos (4)
+                    </button>
+                    <button data-filter="ia-agentes" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300/70 dark:hover:bg-slate-700 transition-all">
+                        IA & Agentes
+                    </button>
+                    <button data-filter="python-backend" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300/70 dark:hover:bg-slate-700 transition-all">
+                        Python & Sistemas
+                    </button>
+                    <button data-filter="integracao-hardware" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300/70 dark:hover:bg-slate-700 transition-all">
+                        Controle de Acesso
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid de Repositórios Reais -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-grid">
+                <!-- Projeto 1: agente_dolar -->
+                <article data-category="ia-agentes" class="project-card spotlight-card group flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 hover:-translate-y-1 shadow-sm transition-all duration-300">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                                Agentes & Busca Semântica
+                            </span>
+                            <a href="https://github.com/ReddyMaine/agente_dolar" target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-emerald-500 transition-colors">
+                                <i class="fa-brands fa-github text-base"></i>
+                                <span>ReddyMaine/agente_dolar</span>
+                            </a>
+                        </div>
+
+                        <h3 class="text-xl font-bold mb-2 font-mono group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            agente_dolar
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
+                            Agentes autônomos com busca semântica para prospecção B2B: extração automatizada de empresas via Maps Scraper e disparo inteligente de mensagens personalizadas para novos leads.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Python</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Busca Semântica</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Maps Scraper</span>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <button onclick="openProjectModal('agente_dolar')" type="button"
+                                class="text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                                Detalhes
+                            </button>
+                            <a href="https://github.com/ReddyMaine/agente_dolar" target="_blank" rel="noopener noreferrer"
+                                class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                                <span>Código</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Projeto 2: contracts_system -->
+                <article data-category="ia-agentes" class="project-card spotlight-card group flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/50 hover:-translate-y-1 shadow-sm transition-all duration-300">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+                                IA Generativa & Gemini API
+                            </span>
+                            <a href="https://github.com/ReddyMaine/contracts_system" target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-cyan-400 transition-colors">
+                                <i class="fa-brands fa-github text-base"></i>
+                                <span>ReddyMaine/contracts_system</span>
+                            </a>
+                        </div>
+
+                        <h3 class="text-xl font-bold mb-2 font-mono group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                            contracts_system
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
+                            Sistema de gestão e análise de contratos públicos utilizando a Gemini API para extrair cláusulas críticas, interpretar riscos e apoiar a tomada de decisão.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Python</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Gemini API</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">LLMs</span>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <button onclick="openProjectModal('contracts_system')" type="button"
+                                class="text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                                Detalhes
+                            </button>
+                            <a href="https://github.com/ReddyMaine/contracts_system" target="_blank" rel="noopener noreferrer"
+                                class="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline inline-flex items-center gap-1">
+                                <span>Código</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Projeto 3: App_vendas -->
+                <article data-category="python-backend" class="project-card spotlight-card group flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-purple-500/50 hover:-translate-y-1 shadow-sm transition-all duration-300">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                                Gestão Comercial & OS
+                            </span>
+                            <a href="https://github.com/ReddyMaine/App_vendas" target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-purple-400 transition-colors">
+                                <i class="fa-brands fa-github text-base"></i>
+                                <span>ReddyMaine/App_vendas</span>
+                            </a>
+                        </div>
+
+                        <h3 class="text-xl font-bold mb-2 font-mono group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                            App_vendas
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
+                            Aplicação desenvolvida em Python para controle operacional de vendas e ordens de serviço (OS), centralizando registros, status de atendimento e histórico comercial.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Python</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">SQL</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Regras de Negócio</span>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <button onclick="openProjectModal('App_vendas')" type="button"
+                                class="text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                                Detalhes
+                            </button>
+                            <a href="https://github.com/ReddyMaine/App_vendas" target="_blank" rel="noopener noreferrer"
+                                class="text-xs font-semibold text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center gap-1">
+                                <span>Código</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Projeto 4: Treinamento-gerenciador -->
+                <article data-category="integracao-hardware" class="project-card spotlight-card group flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 hover:-translate-y-1 shadow-sm transition-all duration-300">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                                Integração & Hardware
+                            </span>
+                            <a href="https://github.com/ReddyMaine/Treinamento-gerenciador" target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-amber-400 transition-colors">
+                                <i class="fa-brands fa-github text-base"></i>
+                                <span>ReddyMaine/Treinamento-gerenciador</span>
+                            </a>
+                        </div>
+
+                        <h3 class="text-xl font-bold mb-2 font-mono group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                            Treinamento-gerenciador
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
+                            Projeto focado em integrações via API e regras de negócio para equipamentos físicos de controle de acesso, tratando eventos, permissões e sincronização.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">APIs REST</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Controle de Acesso</span>
+                            <span class="px-2.5 py-1 rounded-md text-[11px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Integração</span>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <button onclick="openProjectModal('Treinamento-gerenciador')" type="button"
+                                class="text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white">
+                                Detalhes
+                            </button>
+                            <a href="https://github.com/ReddyMaine/Treinamento-gerenciador" target="_blank" rel="noopener noreferrer"
+                                class="text-xs font-semibold text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1">
+                                <span>Código</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Experiência & Formação -->
+    <section id="experiencia" class="py-16 sm:py-20 bg-slate-100/70 dark:bg-slate-950/60 border-y border-slate-200 dark:border-slate-800/80 reveal">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mb-10">
+                <span class="font-mono text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold">04 // Trajetória</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mt-2 tracking-tight">Experiência & Formação</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <!-- Coluna Experiência Profissional (Foco em Dev) -->
+                <div class="lg:col-span-7 space-y-6">
+                    <h3 class="font-mono text-xs uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                        <i class="fa-solid fa-briefcase text-emerald-500"></i>
+                        <span>Experiência em Desenvolvimento</span>
+                    </h3>
+
+                    <div class="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800 space-y-7">
+                        <!-- Experiência 1: Revio -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-4 ring-slate-100 dark:ring-slate-950"></span>
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Mai 2026 — Atual</span>
+                                <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">SP (Híbrido)</span>
+                            </div>
+                            <h4 class="text-lg font-bold mt-1">Desenvolvedor Junior</h4>
+                            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">Revio Tecnologia Tributária</p>
+                            <ul class="text-sm text-slate-600 dark:text-slate-400 mt-2 space-y-1.5 list-disc list-inside">
+                                <li>APIs RESTful, web scraping e automação com <strong class="text-slate-800 dark:text-slate-200">Python (FastAPI, Flask, Playwright, Selenium)</strong> e <code class="text-xs">async</code>/threads.</li>
+                                <li>Arquitetura de <strong class="text-slate-800 dark:text-slate-200">IA Generativa & RAG</strong> com embeddings, chunking, <strong class="text-slate-800 dark:text-slate-200">LlamaIndex</strong> e banco vetorial <strong class="text-slate-800 dark:text-slate-200">Qdrant</strong>.</li>
+                                <li>Modelagem SQL/SQLite, MongoDB e containerização de serviços com <strong class="text-slate-800 dark:text-slate-200">Docker</strong>.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Experiência 2: Invenzi -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-cyan-500 ring-4 ring-slate-100 dark:ring-slate-950"></span>
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="font-mono text-xs text-cyan-600 dark:text-cyan-400 font-semibold">Nov 2025 — Mai 2026</span>
+                                <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">SP (Híbrido)</span>
+                            </div>
+                            <h4 class="text-lg font-bold mt-1">Estagiário de Engenharia de Software</h4>
+                            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">Invenzi Tecnologia</p>
+                            <ul class="text-sm text-slate-600 dark:text-slate-400 mt-2 space-y-1.5 list-disc list-inside">
+                                <li>Integração de software com dispositivos de controle de acesso via APIs em <strong class="text-slate-800 dark:text-slate-200">Python (Flask)</strong> e threads paralelas.</li>
+                                <li>Modelagem, consultas e manutenção de integridade em bancos <strong class="text-slate-800 dark:text-slate-200">SQL & SQLite</strong>.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Experiência Anterior Consolidada -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-slate-400 dark:bg-slate-600 ring-4 ring-slate-100 dark:ring-slate-950"></span>
+                            <span class="font-mono text-xs text-slate-500 font-semibold">Fev 2023 — Nov 2025</span>
+                            <h4 class="text-base font-bold mt-1 text-slate-800 dark:text-slate-200">Base Anterior em TI, Infraestrutura & Suporte</h4>
+                            <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Prodam SP • Sem Parar • PCNow Info</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1.5">
+                                Vivência prévia em suporte técnico corporativo, automação de controles logísticos em Excel, redes, Linux/Windows e manutenção de hardware.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Formação, Idiomas & Certificações -->
+                <div class="lg:col-span-5 space-y-5">
+                    <h3 class="font-mono text-xs uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-cyan-500"></i>
+                        <span>Formação & Idiomas</span>
+                    </h3>
+
+                    <div class="spotlight-card p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400">Jan 2023 — Presente (8º Semestre)</span>
+                        <h4 class="font-bold text-base mt-1">Bacharelado em Engenharia de Software</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Universidade São Judas Tadeu (USJT)</p>
+                    </div>
+
+                    <div class="spotlight-card p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <span class="font-mono text-xs text-cyan-600 dark:text-cyan-400">Jan 2018 — Dez 2020</span>
+                        <h4 class="font-bold text-base mt-1">Ensino Técnico em Mecatrônica</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Colégio Pentágono • Santo André</p>
+                    </div>
+
+                    <div class="spotlight-card p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+                        <h4 class="font-bold text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-language text-emerald-500"></i>
+                            <span>Idiomas</span>
+                        </h4>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono">
+                            <span class="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">Português (Nativo)</span>
+                            <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-700 dark:text-cyan-300">Inglês (Avançado)</span>
+                            <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Espanhol (Interm.)</span>
+                        </div>
+                    </div>
+
+                    <div class="spotlight-card p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2.5">
+                        <h4 class="font-bold text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-certificate text-amber-500"></i>
+                            <span>Certificações</span>
+                        </h4>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc list-inside">
+                            <li>The Complete Claude Code & Claude Cowork Masterclass</li>
+                            <li>Curso Completo de MongoDB do Básico ao Avançado (Udemy)</li>
+                            <li>Automação de Testes Web com Selenium & Python (Udemy)</li>
+                            <li>POO com Python (Udemy) & Jornada Python (Hashtag)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Contato -->
+    <section id="contato" class="py-20 sm:py-24 reveal">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="font-mono text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-semibold">05 // Contato</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mt-2 tracking-tight">Vamos conversar?</h2>
+            <p class="text-slate-600 dark:text-slate-400 mt-3 max-w-xl mx-auto text-base">
+                Disponível para oportunidades em <strong class="text-slate-900 dark:text-white">Desenvolvimento Back-end Python</strong>, <strong class="text-slate-900 dark:text-white">IA Generativa / RAG</strong> e <strong class="text-slate-900 dark:text-white">Automação</strong>.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+                <!-- Card LinkedIn -->
+                <a href="https://www.linkedin.com/in/josecosta-dev/" target="_blank" rel="noopener noreferrer"
+                    class="spotlight-card p-6 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-[#0a66c2] dark:hover:border-cyan-400 hover:-translate-y-1 shadow-sm transition-all flex flex-col items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-xl bg-[#0a66c2]/10 text-[#0a66c2] dark:text-cyan-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">LinkedIn</h3>
+                        <p class="text-xs font-mono text-slate-500 mt-1">/in/josecosta-dev</p>
+                    </div>
+                </a>
+
+                <!-- Card GitHub -->
+                <a href="https://github.com/ReddyMaine?tab=repositories" target="_blank" rel="noopener noreferrer"
+                    class="spotlight-card p-6 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-slate-400 hover:-translate-y-1 shadow-sm transition-all flex flex-col items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-xl bg-slate-500/10 text-slate-800 dark:text-slate-200 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-github"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">GitHub</h3>
+                        <p class="text-xs font-mono text-slate-500 mt-1">@ReddyMaine</p>
+                    </div>
+                </a>
+
+                <!-- Card WhatsApp -->
+                <a href="https://wa.me/5511916060507" target="_blank" rel="noopener noreferrer"
+                    class="spotlight-card p-6 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 hover:-translate-y-1 shadow-sm transition-all flex flex-col items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">WhatsApp</h3>
+                        <p class="text-xs font-mono text-slate-500 mt-1">(11) 91606-0507</p>
+                    </div>
+                </a>
+
+                <!-- Card E-mail (Copiar) -->
+                <button onclick="copyEmail()" type="button"
+                    class="spotlight-card p-6 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-amber-500 hover:-translate-y-1 shadow-sm transition-all flex flex-col items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base">Copiar E-mail</h3>
+                        <p id="email-display" class="text-xs font-mono text-slate-500 mt-1">cttjosecosta@gmail.com</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="no-print border-t border-slate-200 dark:border-slate-800 py-8 text-center text-xs font-mono text-slate-500">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>© <span id="current-year"></span> José Luis da Costa Junior • Diadema, SP</p>
+            <p>Python • FastAPI • RAG • Docker</p>
+        </div>
+    </footer>
+
+    <!-- Modal de Detalhes Técnicos do Projeto -->
+    <div id="project-modal" class="no-print fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+        <div class="relative w-full max-w-xl rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-2xl">
+            <button onclick="closeProjectModal()" type="button" aria-label="Fechar modal"
+                class="absolute top-4 right-4 w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <span id="modal-tag" class="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"></span>
+            <h3 id="modal-title" class="text-2xl font-bold font-mono mt-3"></h3>
+            <p id="modal-desc" class="text-sm text-slate-600 dark:text-slate-300 mt-3 leading-relaxed"></p>
+
+            <div class="mt-5">
+                <h4 class="text-xs font-mono uppercase tracking-wider text-slate-500 mb-2">Arquitetura & Funcionalidades</h4>
+                <ul id="modal-highlights" class="space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc list-inside"></ul>
+            </div>
+
+            <div class="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap justify-between items-center gap-3">
+                <a id="modal-github-link" href="https://github.com/ReddyMaine?tab=repositories" target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors">
+                    <i class="fa-brands fa-github"></i>
+                    <span>Abrir Repositório no GitHub</span>
+                </a>
+                <button onclick="closeProjectModal()" type="button"
+                    class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Resumo Executivo do Currículo -->
+    <div id="resume-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+        <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-2xl">
+            <div class="no-print flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+                <span class="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-semibold">RESUMO EXECUTIVO // CV</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.print()" type="button"
+                        class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Imprimir / Salvar PDF</span>
+                    </button>
+                    <button onclick="closeResumeModal()" type="button"
+                        class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-5 space-y-4 text-left">
+                <div>
+                    <h3 class="text-2xl font-bold">José Luis da Costa Junior</h3>
+                    <p class="text-sm text-emerald-600 dark:text-emerald-400 font-medium">Desenvolvedor Back-end Python • Automação • IA Generativa (RAG)</p>
+                    <p class="text-xs text-slate-500 font-mono mt-1">Diadema, SP • (11) 91606-0507 • cttjosecosta@gmail.com • github.com/ReddyMaine</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 text-sm text-slate-600 dark:text-slate-300">
+                    Desenvolvedor Junior na Revio Tecnologia Tributária e estudante de Engenharia de Software (8º sem., USJT). Experiência com Python (FastAPI, Flask), APIs RESTful, automação com Playwright/Selenium, RAG (LlamaIndex, Qdrant, Gemini API), SQL, MongoDB e Docker. Inglês avançado.
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-sm uppercase tracking-wider text-slate-500 mb-2">Destaques</h4>
+                    <ul class="text-sm text-slate-600 dark:text-slate-300 space-y-1.5 list-disc list-inside">
+                        <li><strong>Desenvolvedor Junior — Revio Tecnologia Tributária:</strong> Python (FastAPI/Flask), RAG, LlamaIndex, Qdrant, Docker e SQL.</li>
+                        <li><strong>Estagiário de Engenharia de Software — Invenzi Tecnologia:</strong> Integração com controle de acesso via APIs Python/Flask e threads.</li>
+                        <li><strong>Formação:</strong> Bacharelado em Engenharia de Software (USJT — 8º sem.) & Técnico em Mecatrônica (Colégio Pentágono).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificação Toast -->
+    <div id="toast" class="no-print fixed bottom-5 right-5 z-50 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="px-4 py-3 rounded-xl bg-slate-900 dark:bg-emerald-600 text-white text-sm font-medium shadow-xl flex items-center gap-2.5 border border-slate-700 dark:border-emerald-400">
+            <i class="fa-solid fa-circle-check text-emerald-400 dark:text-white"></i>
+            <span id="toast-msg">E-mail copiado!</span>
+        </div>
+    </div>
+
+    <!-- Scripts de Interatividade -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Ano atual no rodapé
+            const yearEl = document.getElementById('current-year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // 2. Alternância de Tema (Claro / Escuro)
+            const htmlEl = document.documentElement;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+
+            function updateThemeIcon() {
+                if (!themeIcon) return;
+                if (htmlEl.classList.contains('dark')) {
+                    themeIcon.className = 'fa-solid fa-sun text-amber-400';
+                } else {
+                    themeIcon.className = 'fa-solid fa-moon text-slate-700';
+                }
+            }
+            updateThemeIcon();
+
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    htmlEl.classList.toggle('dark');
+                    updateThemeIcon();
+                });
+            }
+
+            // 3. Menu Mobile
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mobileMenu) mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // 4. Filtro de Projetos
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const projectCards = document.querySelectorAll('.project-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-emerald-600', 'text-white');
+                        b.classList.add('bg-slate-200/70', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+                    });
+                    btn.classList.remove('bg-slate-200/70', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+                    btn.classList.add('bg-emerald-600', 'text-white');
+
+                    const filter = btn.getAttribute('data-filter');
+                    projectCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // 5. Terminal Interativo com Abas + Botão Run
+            let currentTerminalTab = 'dev';
+            const terminalSnippets = {
+                dev: `<pre><code><span class="text-purple-400">class</span> <span class="text-amber-300">BackendDeveloper</span>:
+    <span class="text-purple-400">def</span> <span class="text-cyan-400">__init__</span>(<span class="text-rose-400">self</span>):
+        <span class="text-rose-400">self</span>.nome = <span class="text-emerald-400">"José Luis da Costa Junior"</span>
+        <span class="text-rose-400">self</span>.cargo = <span class="text-emerald-400">"Desenvolvedor Back-end Jr"</span>
+        <span class="text-rose-400">self</span>.local = <span class="text-emerald-400">"Diadema, SP"</span>
+        <span class="text-rose-400">self</span>.core_stack = [
+            <span class="text-emerald-400">"Python"</span>, <span class="text-emerald-400">"FastAPI"</span>, <span class="text-emerald-400">"Flask"</span>,
+            <span class="text-emerald-400">"LlamaIndex"</span>, <span class="text-emerald-400">"Qdrant"</span>, <span class="text-emerald-400">"RAG"</span>,
+            <span class="text-emerald-400">"SQL"</span>, <span class="text-emerald-400">"MongoDB"</span>, <span class="text-emerald-400">"Docker"</span>
+        ]
+
+    <span class="text-purple-400">def</span> <span class="text-cyan-400">status</span>(<span class="text-rose-400">self</span>) -> <span class="text-amber-300">str</span>:
+        <span class="text-purple-400">return</span> <span class="text-emerald-400">"APIs, Automação & IA Generativa"</span><span class="terminal-cursor"></span></code></pre>`,
+
+                rag: `<pre><code><span class="text-purple-400">from</span> llama_index.core <span class="text-purple-400">import</span> VectorStoreIndex
+<span class="text-purple-400">from</span> qdrant_client <span class="text-purple-400">import</span> QdrantClient
+
+<span class="text-slate-500"># Pipeline de Busca Semântica & RAG</span>
+client = QdrantClient(url=<span class="text-emerald-400">"http://qdrant:6333"</span>)
+
+<span class="text-purple-400">async def</span> <span class="text-cyan-400">semantic_query</span>(prompt: <span class="text-amber-300">str</span>):
+    engine = index.as_query_engine(
+        similarity_top_k=<span class="text-amber-300">5</span>
+    )
+    response = <span class="text-purple-400">await</span> engine.aquery(prompt)
+    <span class="text-purple-400">return</span> {<span class="text-emerald-400">"answer"</span>: str(response)}<span class="terminal-cursor"></span></code></pre>`,
+
+                docker: `<pre><code><span class="text-cyan-400">services:</span>
+  <span class="text-emerald-400">backend-api:</span>
+    <span class="text-purple-400">build:</span> .
+    <span class="text-purple-400">ports:</span>
+      - <span class="text-amber-300">"8000:8000"</span>
+    <span class="text-purple-400">environment:</span>
+      - ENV=production
+      - QDRANT_HOST=vector-db
+
+  <span class="text-emerald-400">vector-db:</span>
+    <span class="text-purple-400">image:</span> qdrant/qdrant:latest
+    <span class="text-purple-400">restart:</span> always<span class="terminal-cursor"></span></code></pre>`
+            };
+
+            const terminalOutputs = {
+                dev: '> python developer.py -> Status: "APIs, Automação & IA Generativa" [200 OK]',
+                rag: '> semantic_query("leads B2B") -> 5 contextos recuperados do Qdrant em 42ms',
+                docker: '> docker compose up -d -> backend-api (healthy) | vector-db (healthy)'
+            };
+
+            const terminalContent = document.getElementById('terminal-content');
+            const terminalOutput = document.getElementById('terminal-output');
+            const runTerminalBtn = document.getElementById('run-terminal-btn');
+
+            document.querySelectorAll('.terminal-tab').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabKey = btn.getAttribute('data-tab');
+                    currentTerminalTab = tabKey;
+
+                    document.querySelectorAll('.terminal-tab').forEach(b => {
+                        b.classList.remove('bg-slate-800', 'text-emerald-400', 'border', 'border-slate-700');
+                        b.classList.add('text-slate-400');
+                    });
+
+                    btn.classList.remove('text-slate-400');
+                    btn.classList.add('bg-slate-800', 'text-emerald-400', 'border', 'border-slate-700');
+
+                    if (terminalOutput) terminalOutput.classList.add('hidden');
+                    if (terminalContent) {
+                        terminalContent.style.opacity = '0';
+                        setTimeout(() => {
+                            terminalContent.innerHTML = terminalSnippets[tabKey];
+                            terminalContent.style.opacity = '1';
+                        }, 150);
+                    }
+                });
+            });
+
+            if (runTerminalBtn && terminalOutput) {
+                runTerminalBtn.addEventListener('click', () => {
+                    terminalOutput.textContent = terminalOutputs[currentTerminalTab] || '';
+                    terminalOutput.classList.remove('hidden');
+                });
+            }
+
+            // 6. Efeito Spotlight nos cards (segue o cursor)
+            document.querySelectorAll('.spotlight-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+                });
+            });
+
+            // 7. Scroll Reveal: cada seção e card só aparecem quando você rola até eles
+            document.body.classList.add('js-reveal');
+
+            document.querySelectorAll('section.reveal').forEach(section => {
+                const targets = section.querySelectorAll(
+                    '.spotlight-card, .project-card, .relative.pl-6 > div'
+                );
+                targets.forEach((item, index) => {
+                    item.classList.add('reveal-item');
+                    const delay = Math.min(index * 110, 440);
+                    item.style.setProperty('--reveal-delay', `${delay}ms`);
+                });
+            });
+
+            if ('IntersectionObserver' in window) {
+                const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.14,
+                    rootMargin: '0px 0px -60px 0px'
+                });
+
+                document.querySelectorAll('.reveal, .reveal-item').forEach(el => {
+                    revealObserver.observe(el);
+                });
+            } else {
+                document.querySelectorAll('.reveal, .reveal-item').forEach(el => {
+                    el.classList.add('is-visible');
+                });
+            }
+
+            // 8. Barra de Progresso & Destaque Ativo no Menu
+            const progressBar = document.getElementById('scroll-progress');
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                if (progressBar) progressBar.style.width = scrollPercent + '%';
+
+                let currentSection = '';
+                sections.forEach(sec => {
+                    if (scrollTop >= sec.offsetTop - 130) {
+                        currentSection = sec.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('text-emerald-600', 'dark:text-emerald-400', 'font-semibold');
+                    if (link.getAttribute('href') === '#' + currentSection) {
+                        link.classList.add('text-emerald-600', 'dark:text-emerald-400', 'font-semibold');
+                    }
+                });
+            }, { passive: true });
+        });
+
+        // 9. Dados dos Modais de Projetos (escopo global para onclick)
+        const projectsData = {
+            agente_dolar: {
+                tag: 'Agentes Autônomos & Busca Semântica',
+                title: 'agente_dolar',
+                url: 'https://github.com/ReddyMaine/agente_dolar',
+                desc: 'Sistema baseado em agentes inteligentes desenvolvido em Python para automatizar a prospecção comercial B2B e qualificação de leads usando busca semântica.',
+                highlights: [
+                    'Extração automatizada de dados empresariais via Maps Scraper.',
+                    'Aplicação de busca semântica para filtragem e contextualização do perfil das empresas encontradas.',
+                    'Fluxo automatizado para disparo de mensagens personalizadas a novos leads.'
+                ]
+            },
+            contracts_system: {
+                tag: 'IA Generativa & Gemini API',
+                title: 'contracts_system',
+                url: 'https://github.com/ReddyMaine/contracts_system',
+                desc: 'Plataforma desenvolvida em Python para gestão e análise automatizada de contratos públicos com integração direta à Gemini API.',
+                highlights: [
+                    'Processamento e interpretação automatizada de cláusulas contratuais via LLM.',
+                    'Identificação de pontos de atenção, prazos e obrigações para apoio à decisão.',
+                    'Organização estruturada dos registros contratuais.'
+                ]
+            },
+            App_vendas: {
+                tag: 'Gestão Comercial & Ordens de Serviço',
+                title: 'App_vendas',
+                url: 'https://github.com/ReddyMaine/App_vendas',
+                desc: 'Aplicação voltada ao gerenciamento completo do fluxo de vendas e ordens de serviço (OS), centralizando dados operacionais.',
+                highlights: [
+                    'Cadastro e acompanhamento de pedidos de venda e execução de ordens de serviço.',
+                    'Controle de status operacional e histórico de atendimentos.',
+                    'Estrutura modular focada em confiabilidade dos dados.'
+                ]
+            },
+            'Treinamento-gerenciador': {
+                tag: 'Integração & Controle de Acesso',
+                title: 'Treinamento-gerenciador',
+                url: 'https://github.com/ReddyMaine/Treinamento-gerenciador',
+                desc: 'Projeto prático voltado à integração de software com equipamentos físicos de controle de acesso e implementação de regras de negócio.',
+                highlights: [
+                    'Comunicação entre camada de aplicação e dispositivos físicos de controle de acesso.',
+                    'Implementação de regras de negócio para permissões, credenciais e eventos.',
+                    'Base estruturada para sincronização confiável entre sistema e hardware.'
+                ]
+            }
+        };
+
+        function openProjectModal(key) {
+            const data = projectsData[key];
+            if (!data) return;
+
+            document.getElementById('modal-tag').textContent = data.tag;
+            document.getElementById('modal-title').textContent = data.title;
+            document.getElementById('modal-desc').textContent = data.desc;
+            document.getElementById('modal-github-link').href = data.url;
+
+            const list = document.getElementById('modal-highlights');
+            list.innerHTML = '';
+            data.highlights.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                list.appendChild(li);
+            });
+
+            const modal = document.getElementById('project-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('project-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openResumeModal() {
+            const modal = document.getElementById('resume-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeResumeModal() {
+            const modal = document.getElementById('resume-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('project-modal')) closeProjectModal();
+            if (e.target === document.getElementById('resume-modal')) closeResumeModal();
+        });
+
+        // 10. Copiar E-mail com Fallback
+        function copyEmail() {
+            const email = 'cttjosecosta@gmail.com';
+            const tempInput = document.createElement('input');
+            tempInput.value = email;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showToast('E-mail copiado: ' + email);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
